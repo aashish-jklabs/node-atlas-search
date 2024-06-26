@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const fs = require('fs');
 const AtlasSearchQueryBuilder = require('../classes/AtlasSearchQueryBuilder');
 
-const searchSamples = async ({ query, phrasePaths, enableFuzzy, multiAnalyser, dbName, collectionName }) => {
+const searchSamples = async ({ query, phrasePaths, enableFuzzy, multiAnalyser, dbName, collectionName, page = 1, limit = 10 }) => {
     const searchQuery = AtlasSearchQueryBuilder.buildSearchCompoundOperator({ query, phrasePaths, enableFuzzy, multiAnalyser });
 
     if (!searchQuery) {
@@ -14,6 +14,12 @@ const searchSamples = async ({ query, phrasePaths, enableFuzzy, multiAnalyser, d
     const pipeline = [
         {
             $search: searchQuery
+        },
+        {
+            $skip: (page - 1) * limit
+        },
+        {
+            $limit: limit
         }
     ];
 

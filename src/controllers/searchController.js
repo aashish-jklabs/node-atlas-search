@@ -1,7 +1,7 @@
 const { searchSamples } = require('../usecases/searchSamples');
 
 const searchController = async (req, res) => {
-    const { query, phrasePaths, enableFuzzy, multiAnalyser, dbName, collectionName } = req.body;
+    const { query, phrasePaths, enableFuzzy, multiAnalyser, dbName, collectionName, page, limit } = req.body;
 
     console.log(query, phrasePaths, enableFuzzy, multiAnalyser, dbName, collectionName);
 
@@ -10,7 +10,7 @@ const searchController = async (req, res) => {
     }
 
     try {
-        const results = await searchSamples({ query, phrasePaths, enableFuzzy, multiAnalyser, dbName, collectionName });
+        const results = await searchSamples({ query, phrasePaths, enableFuzzy, multiAnalyser, dbName, collectionName, page, limit });
         res.send({ results });
     } catch (error) {
         res.status(500).json({ error: error.message });
